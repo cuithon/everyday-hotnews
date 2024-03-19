@@ -45,6 +45,11 @@ type fetcher struct {
 }
 
 func (f *fetcher) Fetch(src string, duration, timeout time.Duration) (*profile.Profile, string, error) {
+
+	if _, openErr := os.Stat(src); openErr == nil {
+		return nil, "", nil
+	}
+
 	sourceURL, timeout := adjustURL(src, duration, timeout)
 	if sourceURL == "" {
 		// Could not recognize URL, let regular pprof attempt to fetch the profile (eg. from a file)
